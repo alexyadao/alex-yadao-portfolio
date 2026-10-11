@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Project } from './types';
 import { PROJECTS } from './data/portfolioData';
 import { ThemeProvider } from './context/ThemeContext';
@@ -28,6 +28,14 @@ export default function App() {
   const [isICTesterOpen, setIsICTesterOpen] = useState(false);
   const [isIoTDashboardOpen, setIsIoTDashboardOpen] = useState(false);
   const [isApiTesterOpen, setIsApiTesterOpen] = useState(false);
+
+  // Safety fallback timeout to ensure the portfolio never stays stuck
+  useEffect(() => {
+    const safetyTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500);
+    return () => clearTimeout(safetyTimer);
+  }, []);
 
   const handleOpenTerminal = () => {
     const el = document.getElementById('terminal');
