@@ -33,7 +33,7 @@ export default function App() {
   useEffect(() => {
     const safetyTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 3500);
+    }, 5500);
     return () => clearTimeout(safetyTimer);
   }, []);
 
