@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Project } from './types';
 import { PROJECTS } from './data/portfolioData';
 import { ThemeProvider } from './context/ThemeContext';
+import { LoadingScreen } from './components/LoadingScreen';
 import { ScrollProgressBar } from './components/ScrollProgressBar';
 import { AmbientBackground } from './components/AmbientBackground';
 import { Navbar } from './components/Navbar';
@@ -21,6 +22,7 @@ import { ApiTesterModal } from './components/ApiTesterModal';
 import { ScrollToTop } from './components/ScrollToTop';
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isNetworkTopologyOpen, setIsNetworkTopologyOpen] = useState(false);
   const [isICTesterOpen, setIsICTesterOpen] = useState(false);
@@ -36,6 +38,9 @@ export default function App() {
 
   return (
     <ThemeProvider>
+      {/* Authentic System Boot Terminal Loading Screen */}
+      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+
       <div className="relative overflow-x-hidden w-full min-h-screen bg-transparent text-zinc-900 dark:text-zinc-100 font-sans selection:bg-indigo-500/20 selection:text-indigo-800 dark:selection:bg-indigo-500/30 dark:selection:text-indigo-200 transition-colors duration-300">
         {/* Premium ambient animated aurora background with telemetry grid */}
         <AmbientBackground />
