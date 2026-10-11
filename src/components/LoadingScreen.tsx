@@ -9,7 +9,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    // 4.4-second cinematic progression (4400ms total progress duration)
+    // 4.4-second cinematic progression (4400ms total duration)
     const totalDuration = 4400;
     const startTime = performance.now();
     let animFrameId: number;
@@ -18,8 +18,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       const elapsed = currentTime - startTime;
       const progressFraction = Math.min(elapsed / totalDuration, 1);
 
-      // Smooth easing with dynamic speed curves (rapid initial sync, steady progression, confident finish)
-      // Ease in-out cubic blend
+      // Smooth cubic-bezier ease in-out curve
       let eased: number;
       if (progressFraction < 0.5) {
         eased = 4 * Math.pow(progressFraction, 3);
@@ -27,21 +26,20 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         eased = 1 - Math.pow(-2 * progressFraction + 2, 3) / 2;
       }
 
-      // Slightly add subtle micro-jitter pauses to mimic realistic edge handshake ping packets
       const val = Math.min(Math.floor(eased * 100), 100);
       setPercent(val);
 
       if (progressFraction < 1) {
         animFrameId = requestAnimationFrame(animateProgress);
       } else {
-        // Once 100% reached, hold for a breath (180ms), fade out smoothly, and call onComplete
+        // Hold for a momentary breath upon hitting 100%, then trigger smooth cinematic fade out
         const exitTimer = setTimeout(() => {
           setIsExiting(true);
           const completeTimer = setTimeout(() => {
             onComplete();
           }, 700);
           return () => clearTimeout(completeTimer);
-        }, 180);
+        }, 160);
         return () => clearTimeout(exitTimer);
       }
     };
@@ -53,14 +51,13 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     };
   }, [onComplete]);
 
-  // Dynamic telemetry status message matching system boot & server discovery milestones
-  const getDiscoveryStatus = (p: number) => {
-    if (p < 15) return 'INITIALIZING CORE TELEMETRY...';
-    if (p < 35) return 'EMITTING 360° NETWORK RADAR PING...';
-    if (p < 55) return 'RESOLVING MULTI-REGION TOPOLOGY NODES...';
-    if (p < 75) return 'SYNCHRONIZING EDGE SERVERS & SILICON BUSES...';
-    if (p < 95) return 'CALIBRATING FULL-STACK INTERFACE CARRIERS...';
-    return 'SYSTEM TOPOLOGY VERIFIED // NOMINAL';
+  // Telemetry status updates mapped to loading stages
+  const getOrbitalStatus = (p: number) => {
+    if (p < 20) return 'INITIALIZING SYSTEM KERNEL & ORBITAL BUS...';
+    if (p < 45) return 'DISCOVERING DISTRIBUTED ORBITAL DATA NODES...';
+    if (p < 70) return 'SYNCHRONIZING TOPOLOGY & ENCRYPTED DATALINKS...';
+    if (p < 92) return 'CALIBRATING HARDWARE LOGIC & BUS INTERFACES...';
+    return 'ALL DATA NODES SYNCHRONIZED // SYSTEMS NOMINAL';
   };
 
   return (
@@ -68,506 +65,530 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       className={`fixed inset-0 z-[100] bg-[#020617] flex flex-col items-center justify-center p-4 overflow-hidden select-none transition-all duration-700 ease-out ${
         isExiting ? 'opacity-0 scale-[0.98] pointer-events-none' : 'opacity-100 scale-100'
       }`}
-      aria-label="Systems and Network Infrastructure Discovery"
+      aria-label="Systems Initialization Loading Screen"
       role="progressbar"
       aria-valuenow={percent}
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      {/* 1. Deep Midnight-Navy / Indigo / Cyan Gradient Backdrop Ambient Glow */}
+      {/* Inline styles for smooth 60fps orbital rotations & keyframes */}
+      <style>{`
+        @keyframes orbit-cw-1 {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes orbit-ccw-1 {
+          from { transform: rotate(360deg); }
+          to { transform: rotate(0deg); }
+        }
+        @keyframes orbit-cw-2 {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes orbit-ccw-2 {
+          from { transform: rotate(360deg); }
+          to { transform: rotate(0deg); }
+        }
+        @keyframes orbit-pulse {
+          0%, 100% { opacity: 0.35; transform: scale(1); }
+          50% { opacity: 0.75; transform: scale(1.02); }
+        }
+        @keyframes logo-glow-breath {
+          0%, 100% { filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.35)) drop-shadow(0 0 45px rgba(16, 185, 129, 0.2)); }
+          50% { filter: drop-shadow(0 0 35px rgba(6, 182, 212, 0.65)) drop-shadow(0 0 70px rgba(16, 185, 129, 0.35)); }
+        }
+        @keyframes particle-drift {
+          0% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+          50% { transform: translateY(-12px) translateX(8px); opacity: 0.7; }
+          100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+        }
+        .animate-orbit-cw-1 {
+          animation: orbit-cw-1 32s linear infinite;
+        }
+        .animate-orbit-ccw-1 {
+          animation: orbit-ccw-1 26s linear infinite;
+        }
+        .animate-orbit-cw-2 {
+          animation: orbit-cw-2 40s linear infinite;
+        }
+        .animate-orbit-ccw-2 {
+          animation: orbit-ccw-2 20s linear infinite;
+        }
+        .animate-logo-glow {
+          animation: logo-glow-breath 3.5s ease-in-out infinite;
+        }
+      `}</style>
+
+      {/* 1. Deep Midnight-Navy / Indigo Ambient Radial Void */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.12) 0%, rgba(79, 70, 229, 0.08) 35%, rgba(15, 23, 42, 0.85) 70%, #020617 100%)',
+            'radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.12) 0%, rgba(79, 70, 229, 0.08) 35%, rgba(15, 23, 42, 0.88) 70%, #020617 100%)',
         }}
       />
 
-      {/* 2. Micro Dot Matrix Pattern Overlay */}
+      {/* 2. Micro Dot Matrix Texture Overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-20"
+        className="absolute inset-0 pointer-events-none opacity-10"
         style={{
           backgroundImage:
-            'radial-gradient(rgba(56, 189, 248, 0.25) 1px, transparent 1px)',
+            'radial-gradient(rgba(56, 189, 248, 0.35) 1px, transparent 1px)',
           backgroundSize: '24px 24px',
           backgroundPosition: 'center center',
         }}
       />
 
-      {/* 3. Subtle Cybernetic Crosshair Overlay in Background */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 opacity-15">
-        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
-        <div className="h-full w-[1px] absolute bg-gradient-to-b from-transparent via-cyan-500/40 to-transparent" />
+      {/* 3. Subtle Digital Floating Dust / Nodes in Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
+        <div
+          className="absolute w-1.5 h-1.5 rounded-full bg-cyan-400 top-[18%] left-[22%]"
+          style={{ animation: 'particle-drift 7s ease-in-out infinite' }}
+        />
+        <div
+          className="absolute w-1 h-1 rounded-full bg-emerald-400 top-[32%] right-[25%]"
+          style={{ animation: 'particle-drift 9s ease-in-out infinite 1s' }}
+        />
+        <div
+          className="absolute w-1.5 h-1.5 rounded-full bg-sky-400 bottom-[24%] left-[28%]"
+          style={{ animation: 'particle-drift 8s ease-in-out infinite 2s' }}
+        />
+        <div
+          className="absolute w-1 h-1 rounded-full bg-indigo-400 bottom-[36%] right-[20%]"
+          style={{ animation: 'particle-drift 10s ease-in-out infinite 3s' }}
+        />
+        <div
+          className="absolute w-1 h-1 rounded-full bg-cyan-300 top-[65%] left-[15%]"
+          style={{ animation: 'particle-drift 6s ease-in-out infinite 1.5s' }}
+        />
       </div>
 
-      {/* 4. Background Layer: Full Radial Ping Sweep & Network Topology Radar */}
+      {/* 4. Background Layer: Sparse, Faint Orbital Trajectories & Gracefully Sliding Data Nodes */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-visible">
         <svg
           viewBox="0 0 1000 1000"
-          className="w-[720px] h-[720px] sm:w-[920px] sm:h-[920px] md:w-[1100px] md:h-[1100px] max-w-none text-cyan-400 select-none animate-spin-extremely-slow"
-          style={{ animationDuration: '40s' }}
+          className="w-[780px] h-[780px] sm:w-[940px] sm:h-[940px] md:w-[1150px] md:h-[1150px] max-w-none text-cyan-400 select-none"
         >
           <defs>
-            {/* Ping Sweep Conic Gradient */}
-            <radialGradient id="radarSweepGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.25" />
-              <stop offset="60%" stopColor="#38bdf8" stopOpacity="0.08" />
-              <stop offset="100%" stopColor="#4f46e5" stopOpacity="0" />
-            </radialGradient>
-
-            {/* Sweep Needle Gradient */}
-            <linearGradient id="sweepRay" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.9" />
-              <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+            {/* Gradients for Orbital Paths */}
+            <linearGradient id="orbitGradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.35" />
             </linearGradient>
 
-            {/* Node Pulse Glow Filter */}
-            <filter id="nodeGlow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
+            <linearGradient id="orbitGradIndigo" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.35" />
+              <stop offset="50%" stopColor="#818cf8" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.3" />
+            </linearGradient>
+
+            <linearGradient id="orbitGradEmerald" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+              <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.1" />
+              <stop offset="100%" stopColor="#10b981" stopOpacity="0.25" />
+            </linearGradient>
+
+            {/* Glowing Node Filter */}
+            <filter id="orbitalNodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
           </defs>
 
-          {/* Central Target Calibration Graticules */}
-          <line x1="500" y1="20" x2="500" y2="980" stroke="#0e7490" strokeWidth="1" strokeDasharray="3 6" opacity="0.25" />
-          <line x1="20" y1="500" x2="980" y2="500" stroke="#0e7490" strokeWidth="1" strokeDasharray="3 6" opacity="0.25" />
-          <line x1="160" y1="160" x2="840" y2="840" stroke="#4f46e5" strokeWidth="0.8" strokeDasharray="2 8" opacity="0.18" />
-          <line x1="160" y1="840" x2="840" y2="160" stroke="#4f46e5" strokeWidth="0.8" strokeDasharray="2 8" opacity="0.18" />
+          {/* Subtle Cybernetic Background Axial Rays */}
+          <line x1="500" y1="60" x2="500" y2="940" stroke="#0e7490" strokeWidth="0.8" strokeDasharray="3 8" opacity="0.15" />
+          <line x1="60" y1="500" x2="940" y2="500" stroke="#0e7490" strokeWidth="0.8" strokeDasharray="3 8" opacity="0.15" />
 
-          {/* Concentric Radar Rings */}
-          {/* Ring 1 (Inner core) */}
-          <circle cx="500" cy="500" r="90" fill="none" stroke="#06b6d4" strokeWidth="1.2" strokeOpacity="0.35" strokeDasharray="4 4" />
-          {/* Ring 2 */}
-          <circle cx="500" cy="500" r="170" fill="none" stroke="#38bdf8" strokeWidth="1.2" strokeOpacity="0.28" />
-          {/* Ring 3 (Dash Segmented) */}
-          <circle cx="500" cy="500" r="260" fill="none" stroke="#6366f1" strokeWidth="1.5" strokeOpacity="0.32" strokeDasharray="8 8" />
-          {/* Ring 4 */}
-          <circle cx="500" cy="500" r="350" fill="none" stroke="#06b6d4" strokeWidth="1.2" strokeOpacity="0.25" strokeDasharray="16 6 4 6" />
-          {/* Ring 5 (Outer perimeter) */}
-          <circle cx="500" cy="500" r="440" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeOpacity="0.18" strokeDasharray="3 6" />
-
-          {/* Dynamic Radar Ping Sweep Beam (Rotating Vector Needle) */}
-          <g className="origin-center animate-radar-sweep" style={{ transformOrigin: '500px 500px' }}>
-            {/* The sweeping radar wedge beam */}
-            <path
-              d="M 500 500 L 940 500 A 440 440 0 0 0 811 189 Z"
-              fill="url(#radarSweepGlow)"
-              className="opacity-70"
+          {/* ========================================================================= */}
+          {/* ORBITAL RING 1: Inner Inclined Orbit (Tilted -28°, Counter-Clockwise) */}
+          {/* ========================================================================= */}
+          <g transform="rotate(-28 500 500)" style={{ transformOrigin: '500px 500px' }}>
+            {/* The faint elliptical orbital track */}
+            <ellipse
+              cx="500"
+              cy="500"
+              rx="290"
+              ry="140"
+              fill="none"
+              stroke="url(#orbitGradCyan)"
+              strokeWidth="1.2"
+              strokeDasharray="6 6"
+              opacity="0.6"
             />
-            {/* Leading ping sweep scan line */}
-            <line
-              x1="500"
-              y1="500"
-              x2="940"
-              y2="500"
-              stroke="url(#sweepRay)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              filter="url(#nodeGlow)"
+            {/* Inner faint guide track */}
+            <ellipse
+              cx="500"
+              cy="500"
+              rx="286"
+              ry="136"
+              fill="none"
+              stroke="#06b6d4"
+              strokeWidth="0.5"
+              opacity="0.2"
             />
-            {/* Micro leading tracer light */}
-            <circle cx="940" cy="500" r="3" fill="#38bdf8" filter="url(#nodeGlow)" />
+
+            {/* Rotating Data Node Carrier on Orbit 1 */}
+            <g
+              className="animate-orbit-ccw-1"
+              style={{ transformOrigin: '500px 500px' }}
+            >
+              {/* Data Node 1A: SYS.KERNEL // [0x4A] */}
+              <g transform="translate(790, 500)">
+                <circle cx="0" cy="0" r="3.5" fill="#06b6d4" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#06b6d4" strokeWidth="0.8" opacity="0.6" />
+                <line x1="5" y1="-5" x2="22" y2="-16" stroke="#06b6d4" strokeWidth="0.8" opacity="0.7" />
+                <line x1="22" y1="-16" x2="92" y2="-16" stroke="#06b6d4" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="26"
+                  y="-20"
+                  fill="#67e8f9"
+                  fontSize="8.5"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  SYS.KERNEL // 0x4A
+                </text>
+              </g>
+
+              {/* Data Node 1B: SEC.VAULT // AES */}
+              <g transform="translate(210, 500)">
+                <circle cx="0" cy="0" r="3" fill="#38bdf8" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="6" fill="none" stroke="#38bdf8" strokeWidth="0.8" opacity="0.5" />
+                <line x1="-5" y1="5" x2="-20" y2="16" stroke="#38bdf8" strokeWidth="0.8" opacity="0.7" />
+                <line x1="-20" y1="16" x2="-88" y2="16" stroke="#38bdf8" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="-85"
+                  y="12"
+                  fill="#7dd3fc"
+                  fontSize="8.5"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  SEC.VAULT // AES
+                </text>
+              </g>
+            </g>
           </g>
 
-          {/* Dynamic Expanding Ping Echo Wave 1 */}
-          <circle
-            cx="500"
-            cy="500"
-            r="120"
-            fill="none"
-            stroke="#06b6d4"
-            strokeWidth="1.8"
-            className="origin-center animate-ping-expand"
-            style={{ transformOrigin: '500px 500px' }}
-          />
-          {/* Dynamic Expanding Ping Echo Wave 2 (Offset phase) */}
-          <circle
-            cx="500"
-            cy="500"
-            r="120"
-            fill="none"
-            stroke="#818cf8"
-            strokeWidth="1.5"
-            className="origin-center animate-ping-expand-delayed"
-            style={{ transformOrigin: '500px 500px' }}
-          />
+          {/* ========================================================================= */}
+          {/* ORBITAL RING 2: Middle Inclined Orbit (Tilted +38°, Clockwise) */}
+          {/* ========================================================================= */}
+          <g transform="rotate(38 500 500)" style={{ transformOrigin: '500px 500px' }}>
+            {/* The faint elliptical orbital track */}
+            <ellipse
+              cx="500"
+              cy="500"
+              rx="390"
+              ry="180"
+              fill="none"
+              stroke="url(#orbitGradIndigo)"
+              strokeWidth="1.3"
+              strokeDasharray="8 6"
+              opacity="0.55"
+            />
+            <ellipse
+              cx="500"
+              cy="500"
+              rx="393"
+              ry="183"
+              fill="none"
+              stroke="#6366f1"
+              strokeWidth="0.5"
+              opacity="0.2"
+            />
 
-          {/* Network Topology Connection Vector Lines between nodes */}
-          <path
-            d="M 500 500 L 620 380 L 740 410 L 820 310"
-            fill="none"
-            stroke="#38bdf8"
-            strokeWidth="1.2"
-            strokeDasharray="4 4"
-            opacity="0.4"
-          />
-          <path
-            d="M 500 500 L 380 620 L 290 570 L 210 680"
-            fill="none"
-            stroke="#818cf8"
-            strokeWidth="1.2"
-            strokeDasharray="4 4"
-            opacity="0.35"
-          />
-          <path
-            d="M 500 500 L 390 390 L 280 340"
-            fill="none"
-            stroke="#06b6d4"
-            strokeWidth="1.2"
-            strokeDasharray="3 3"
-            opacity="0.35"
-          />
-          <path
-            d="M 500 500 L 610 610 L 710 660 L 780 730"
-            fill="none"
-            stroke="#6366f1"
-            strokeWidth="1.2"
-            strokeDasharray="3 3"
-            opacity="0.3"
-          />
+            {/* Rotating Data Node Carrier on Orbit 2 */}
+            <g
+              className="animate-orbit-cw-1"
+              style={{ transformOrigin: '500px 500px' }}
+            >
+              {/* Data Node 2A: DATALINK.SYNC // 10G */}
+              <g transform="translate(890, 500)">
+                <circle cx="0" cy="0" r="4" fill="#818cf8" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="8" fill="none" stroke="#818cf8" strokeWidth="1" opacity="0.6" />
+                <line x1="6" y1="-6" x2="24" y2="-18" stroke="#818cf8" strokeWidth="0.8" opacity="0.7" />
+                <line x1="24" y1="-18" x2="108" y2="-18" stroke="#818cf8" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="28"
+                  y="-22"
+                  fill="#c7d2fe"
+                  fontSize="9"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  DATALINK // 10G-ETH
+                </text>
+              </g>
 
-          {/* Discovered Edge Server & SysAdmin Topology Nodes */}
-          {/* Node 1: US-WEST (Cyan) */}
-          <g className="animate-pulse" style={{ animationDuration: '2.4s' }}>
-            <circle cx="620" cy="380" r="5" fill="#06b6d4" filter="url(#nodeGlow)" />
-            <circle cx="620" cy="380" r="10" fill="none" stroke="#06b6d4" strokeWidth="1" opacity="0.5" />
-            <text x="635" y="384" fill="#38bdf8" fontSize="10" fontFamily="monospace" letterSpacing="0.1em" opacity="0.8">
-              NODE_USW-01 [12ms]
-            </text>
+              {/* Data Node 2B: NEURAL.BUS // ACTV */}
+              <g transform="translate(110, 500)">
+                <circle cx="0" cy="0" r="3.5" fill="#06b6d4" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#06b6d4" strokeWidth="0.8" opacity="0.5" />
+                <line x1="-5" y1="5" x2="-22" y2="18" stroke="#06b6d4" strokeWidth="0.8" opacity="0.7" />
+                <line x1="-22" y1="18" x2="-98" y2="18" stroke="#06b6d4" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="-94"
+                  y="14"
+                  fill="#67e8f9"
+                  fontSize="8.5"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  NEURAL.BUS // ACTV
+                </text>
+              </g>
+            </g>
           </g>
 
-          {/* Node 2: AP-EAST (Indigo/Purple) */}
-          <g className="animate-pulse" style={{ animationDuration: '3.1s' }}>
-            <circle cx="740" cy="410" r="4.5" fill="#818cf8" filter="url(#nodeGlow)" />
-            <circle cx="740" cy="410" r="9" fill="none" stroke="#6366f1" strokeWidth="1" opacity="0.5" />
-            <text x="755" y="414" fill="#a5b4fc" fontSize="9" fontFamily="monospace" letterSpacing="0.1em" opacity="0.75">
-              EDGE_APE-04 [28ms]
-            </text>
+          {/* ========================================================================= */}
+          {/* ORBITAL RING 3: Outer Distant Orbit (Tilted -65°, Slow Clockwise) */}
+          {/* ========================================================================= */}
+          <g transform="rotate(-65 500 500)" style={{ transformOrigin: '500px 500px' }}>
+            {/* The faint elliptical orbital track */}
+            <ellipse
+              cx="500"
+              cy="500"
+              rx="470"
+              ry="210"
+              fill="none"
+              stroke="url(#orbitGradEmerald)"
+              strokeWidth="1.2"
+              strokeDasharray="12 8"
+              opacity="0.5"
+            />
+
+            {/* Rotating Data Node Carrier on Orbit 3 */}
+            <g
+              className="animate-orbit-cw-2"
+              style={{ transformOrigin: '500px 500px' }}
+            >
+              {/* Data Node 3A: TOPOLOGY.MGR // OK */}
+              <g transform="translate(970, 500)">
+                <circle cx="0" cy="0" r="3.5" fill="#10b981" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="7" fill="none" stroke="#10b981" strokeWidth="0.8" opacity="0.6" />
+                <line x1="6" y1="5" x2="22" y2="16" stroke="#10b981" strokeWidth="0.8" opacity="0.7" />
+                <line x1="22" y1="16" x2="105" y2="16" stroke="#10b981" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="26"
+                  y="12"
+                  fill="#6ee7b7"
+                  fontSize="8.5"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  TOPOLOGY // NOMINAL
+                </text>
+              </g>
+
+              {/* Data Node 3B: STORAGE.IOPS // NVMe */}
+              <g transform="translate(30, 500)">
+                <circle cx="0" cy="0" r="3" fill="#06b6d4" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="6" fill="none" stroke="#06b6d4" strokeWidth="0.8" opacity="0.5" />
+                <line x1="-5" y1="-5" x2="-20" y2="-16" stroke="#06b6d4" strokeWidth="0.8" opacity="0.7" />
+                <line x1="-20" y1="-16" x2="-95" y2="-16" stroke="#06b6d4" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="-92"
+                  y="-20"
+                  fill="#67e8f9"
+                  fontSize="8.5"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  IOPS.ARRAY // NVMe
+                </text>
+              </g>
+            </g>
           </g>
 
-          {/* Node 3: EU-CENTRAL (Royal Blue) */}
-          <g className="animate-pulse" style={{ animationDuration: '2.8s' }}>
-            <circle cx="380" cy="620" r="5" fill="#38bdf8" filter="url(#nodeGlow)" />
-            <circle cx="380" cy="620" r="11" fill="none" stroke="#38bdf8" strokeWidth="1" opacity="0.4" />
-            <text x="270" y="624" fill="#38bdf8" fontSize="9" fontFamily="monospace" letterSpacing="0.1em" opacity="0.75">
-              GATEWAY_EUC-09 [19ms]
-            </text>
-          </g>
+          {/* ========================================================================= */}
+          {/* ORBITAL RING 4: Steep Transverse Orbit (Tilted +72°, Counter-Clockwise) */}
+          {/* ========================================================================= */}
+          <g transform="rotate(72 500 500)" style={{ transformOrigin: '500px 500px' }}>
+            <ellipse
+              cx="500"
+              cy="500"
+              rx="440"
+              ry="160"
+              fill="none"
+              stroke="#0ea5e9"
+              strokeWidth="0.9"
+              strokeDasharray="4 10"
+              opacity="0.35"
+            />
 
-          {/* Node 4: IOT-CORE (Cyan) */}
-          <g className="animate-pulse" style={{ animationDuration: '1.9s' }}>
-            <circle cx="390" cy="390" r="4" fill="#06b6d4" filter="url(#nodeGlow)" />
-            <circle cx="390" cy="390" r="8" fill="none" stroke="#06b6d4" strokeWidth="1" opacity="0.5" />
-            <text x="290" y="394" fill="#67e8f9" fontSize="9" fontFamily="monospace" letterSpacing="0.1em" opacity="0.7">
-              IOT_BUS_UART [0.8ms]
-            </text>
-          </g>
-
-          {/* Node 5: PERIPHERAL-MESH (Sky Blue) */}
-          <g className="animate-pulse" style={{ animationDuration: '3.5s' }}>
-            <circle cx="610" cy="610" r="4.5" fill="#38bdf8" filter="url(#nodeGlow)" />
-            <circle cx="610" cy="610" r="9" fill="none" stroke="#38bdf8" strokeWidth="1" opacity="0.4" />
-            <text x="625" y="614" fill="#38bdf8" fontSize="9" fontFamily="monospace" letterSpacing="0.1em" opacity="0.7">
-              MEM_REGISTERS [OK]
-            </text>
-          </g>
-
-          {/* Node 6: Edge Worker (Indigo) */}
-          <g className="animate-pulse" style={{ animationDuration: '2.2s' }}>
-            <circle cx="820" cy="310" r="4" fill="#818cf8" filter="url(#nodeGlow)" />
-            <text x="832" y="314" fill="#c7d2fe" fontSize="8" fontFamily="monospace" letterSpacing="0.1em" opacity="0.6">
-              CDN_VERCEL_EDGE
-            </text>
-          </g>
-
-          {/* Node 7: Core Bus */}
-          <g className="animate-pulse" style={{ animationDuration: '2.6s' }}>
-            <circle cx="210" cy="680" r="3.5" fill="#06b6d4" opacity="0.7" />
-            <text x="120" y="684" fill="#67e8f9" fontSize="8" fontFamily="monospace" letterSpacing="0.1em" opacity="0.6">
-              PCIe_GEN4_LINK
-            </text>
+            <g
+              className="animate-orbit-ccw-2"
+              style={{ transformOrigin: '500px 500px' }}
+            >
+              {/* Data Node 4: DEV.CLUSTER // CLOUD */}
+              <g transform="translate(940, 500)">
+                <circle cx="0" cy="0" r="3.5" fill="#38bdf8" filter="url(#orbitalNodeGlow)" />
+                <circle cx="0" cy="0" r="6.5" fill="none" stroke="#38bdf8" strokeWidth="0.8" opacity="0.6" />
+                <line x1="5" y1="-5" x2="20" y2="-16" stroke="#38bdf8" strokeWidth="0.8" opacity="0.7" />
+                <line x1="20" y1="-16" x2="98" y2="-16" stroke="#38bdf8" strokeWidth="0.8" opacity="0.7" />
+                <text
+                  x="24"
+                  y="-20"
+                  fill="#7dd3fc"
+                  fontSize="8.5"
+                  fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                  letterSpacing="0.12em"
+                  fontWeight="600"
+                >
+                  DEV.CORE // CLOUD
+                </text>
+              </g>
+            </g>
           </g>
         </svg>
       </div>
 
-      {/* 5. Centerpiece: Signature Geometric Animated Monogram {A} */}
-      <div className="relative z-10 flex flex-col items-center justify-center">
-        {/* Glow halo backing behind the Monogram */}
-        <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/25 via-sky-500/15 to-indigo-600/25 rounded-full blur-2xl pointer-events-none animate-pulse" />
+      {/* 5. Centerpiece: Official Portfolio Logo & Systems Monogram */}
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Monogram Outer Glassmorphic Housing */}
+        <div className="relative mb-7 animate-logo-glow">
+          {/* Ambient Glow Background Orb */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/25 via-emerald-500/20 to-indigo-500/25 rounded-3xl blur-2xl opacity-75 animate-pulse" />
 
-        {/* Outer Circular High-Tech Dial Bracket */}
-        <div className="relative w-36 h-36 md:w-44 md:h-44 flex items-center justify-center">
-          {/* Counter-rotating perimeter notches */}
-          <svg
-            className="absolute inset-0 w-full h-full text-cyan-500/40 animate-spin-reverse-slow"
-            viewBox="0 0 160 160"
-            style={{ animationDuration: '28s' }}
-          >
-            {/* Precision corner notches */}
-            <circle
-              cx="80"
-              cy="80"
-              r="76"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeDasharray="4 8 1 8"
-              opacity="0.45"
-            />
-            <circle
-              cx="80"
-              cy="80"
-              r="68"
-              fill="none"
-              stroke="#6366f1"
-              strokeWidth="1"
-              strokeDasharray="16 12 4 12"
-              opacity="0.35"
-            />
-            {/* 4 Cardinal Calibration ticks */}
-            <line x1="80" y1="2" x2="80" y2="10" stroke="#06b6d4" strokeWidth="2" />
-            <line x1="80" y1="150" x2="80" y2="158" stroke="#06b6d4" strokeWidth="2" />
-            <line x1="2" y1="80" x2="10" y2="80" stroke="#06b6d4" strokeWidth="2" />
-            <line x1="150" y1="80" x2="158" y2="80" stroke="#06b6d4" strokeWidth="2" />
-          </svg>
-
-          {/* Forward rotating inner tick mark circle */}
-          <svg
-            className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] text-sky-400/30 animate-spin-slow"
-            viewBox="0 0 144 144"
-            style={{ animationDuration: '18s' }}
-          >
-            <circle
-              cx="72"
-              cy="72"
-              r="66"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeDasharray="30 20 10 20"
-              opacity="0.5"
-            />
-          </svg>
-
-          {/* The Geometric Monogram Vector: Alexander Christian Yadao {A} */}
-          <div className="relative z-10 w-24 h-24 md:w-28 md:h-28 flex items-center justify-center animate-monogram-subtle-float">
+          {/* Precision Glass Container */}
+          <div className="relative h-28 w-28 sm:h-32 sm:w-32 md:h-36 md:w-36 rounded-2xl sm:rounded-3xl bg-slate-900/90 border border-cyan-500/40 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-4 shadow-2xl shadow-cyan-950/60 hover:border-cyan-400/70 transition-all duration-300">
+            {/* The Official Monogram SVG (matching Logo.tsx) */}
             <svg
-              viewBox="0 0 100 100"
-              className="w-full h-full drop-shadow-[0_0_24px_rgba(6,182,212,0.65)]"
+              viewBox="0 0 32 32"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-full transform transition-transform duration-500"
+              aria-label="Alexander Yadao Official Monogram"
             >
               <defs>
-                <linearGradient id="cyberMonogramGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="load-ay-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#06b6d4" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#818cf8" />
+                  <stop offset="60%" stopColor="#22d3ee" />
+                  <stop offset="100%" stopColor="#10b981" />
                 </linearGradient>
-
-                <linearGradient id="cyberCrossbarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#67e8f9" />
-                  <stop offset="60%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#a5b4fc" />
-                </linearGradient>
-
-                <linearGradient id="innerCoreGrad" x1="50%" y1="0%" x2="50%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.1" />
-                </linearGradient>
+                <filter id="load-logo-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="0.8" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
               </defs>
 
-              {/* Background ambient inner polygon diamond fill */}
-              <polygon
-                points="50,16 78,82 22,82"
-                fill="url(#innerCoreGrad)"
-                stroke="#06b6d4"
-                strokeWidth="0.8"
-                strokeOpacity="0.3"
-              />
-
-              {/* Main Structural Apex Frame of {A} */}
-              {/* Left Beam */}
+              {/* Terminal bracket accents `<` and `>` */}
               <path
-                d="M50 14L18 84H29L50 36L71 84H82L50 14Z"
-                fill="url(#cyberMonogramGrad)"
-                className="opacity-95"
+                d="M 5.5 11 L 3 16 L 5.5 21"
+                stroke="url(#load-ay-gradient)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="opacity-75"
+              />
+              <path
+                d="M 26.5 11 L 29 16 L 26.5 21"
+                stroke="url(#load-ay-gradient)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="opacity-75"
               />
 
-              {/* High-Tech Circuit Horizontal Crossbar */}
-              <rect
-                x="30"
-                y="55"
-                width="40"
-                height="6.5"
-                rx="1.5"
-                fill="url(#cyberCrossbarGrad)"
-                className="drop-shadow-[0_0_10px_rgba(56,189,248,0.9)]"
+              {/* Letter 'A' outer geometric chevron & legs */}
+              <path
+                d="M 8.5 24.5 L 16 6.5 L 23.5 24.5"
+                stroke="url(#load-ay-gradient)"
+                strokeWidth="2.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter="url(#load-logo-glow)"
               />
 
-              {/* Circuit Micro-Nodes on the Monogram Crossbar */}
-              <circle cx="34" cy="58.25" r="1.8" fill="#ffffff" />
-              <circle cx="66" cy="58.25" r="1.8" fill="#ffffff" />
-              <circle cx="50" cy="58.25" r="2" fill="#020617" stroke="#67e8f9" strokeWidth="1" />
-
-              {/* Apex Precision Crown Node */}
-              <circle
-                cx="50"
-                cy="14"
-                r="3"
-                fill="#ffffff"
-                className="drop-shadow-[0_0_8px_rgba(56,189,248,1)]"
+              {/* Horizontal crossbar for 'A' with circuit split */}
+              <path
+                d="M 11.2 17.5 L 13.8 17.5 M 18.2 17.5 L 20.8 17.5"
+                stroke="url(#load-ay-gradient)"
+                strokeWidth="2.0"
+                strokeLinecap="round"
               />
 
-              {/* Stepped Architectural Accent Ticks */}
-              <path d="M14 86L20 86" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" />
-              <path d="M80 86L86 86" stroke="#818cf8" strokeWidth="2" strokeLinecap="round" />
+              {/* Letter 'Y' upper fork & central data bus / stem */}
+              <path
+                d="M 11.5 12.5 L 16 17.5 L 20.5 12.5"
+                stroke="url(#load-ay-gradient)"
+                strokeWidth="2.0"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M 16 17.5 L 16 25.5"
+                stroke="url(#load-ay-gradient)"
+                strokeWidth="2.3"
+                strokeLinecap="round"
+                filter="url(#load-logo-glow)"
+              />
+
+              {/* Circuit nodes / terminal connection pads */}
+              <circle cx="16" cy="6.5" r="1.4" fill="#06b6d4" />
+              <circle cx="8.5" cy="24.5" r="1.4" fill="#10b981" />
+              <circle cx="23.5" cy="24.5" r="1.4" fill="#10b981" />
+              <circle cx="16" cy="25.5" r="1.6" fill="#10b981" />
+              <circle cx="16" cy="17.5" r="1.2" fill="#06b6d4" />
             </svg>
+
+            {/* Online Status Beacon Pulse (Matching Logo.tsx) */}
+            <span
+              className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5 items-center justify-center"
+              title="System Online"
+            >
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
+            </span>
           </div>
         </div>
 
-        {/* 6. Typography & Systems Telemetry Stack */}
-        <div className="mt-8 flex flex-col items-center text-center space-y-2 z-10">
-          {/* Primary Engineer Title */}
-          <h1 className="text-white text-sm sm:text-base md:text-lg font-bold tracking-[0.28em] uppercase font-mono drop-shadow-[0_2px_12px_rgba(255,255,255,0.2)]">
+        {/* 6. Typography: Personal Brand & Domain Engineering */}
+        <div className="flex flex-col items-center text-center space-y-1.5 mb-6 max-w-sm sm:max-w-md">
+          <h1 className="text-white text-base sm:text-lg md:text-xl font-bold tracking-[0.28em] uppercase drop-shadow-[0_0_16px_rgba(6,182,212,0.4)]">
             ALEXANDER CHRISTIAN R. YADAO
           </h1>
-
-          {/* Subtitle: Silicon Architecture & Systems */}
-          <div className="flex items-center space-x-2 text-cyan-400/90 text-[10px] sm:text-[11px] md:text-xs tracking-[0.3em] font-mono">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            <span>SYSTEMS &amp; COMPUTER ENGINEERING</span>
-          </div>
-
-          {/* Dynamic Ping Sweep Stage Status */}
-          <p className="text-sky-300/75 text-[10px] sm:text-[11px] tracking-[0.25em] font-mono h-4">
-            {getDiscoveryStatus(percent)}
+          <p className="text-cyan-400/90 text-[11px] sm:text-xs font-mono font-medium tracking-[0.25em] uppercase">
+            SYSTEMS & COMPUTER ENGINEERING
           </p>
         </div>
 
-        {/* 7. Ultra-Clean Neon Glowing Progress Bar & Percentage Telemetry */}
-        <div className="mt-6 w-64 sm:w-72 md:w-80 flex flex-col items-center space-y-2 z-10">
-          {/* Top telemetry tags */}
-          <div className="w-full flex justify-between items-center text-[10px] font-mono text-cyan-400/70 tracking-widest px-0.5">
-            <span>PING: 24ms [SYN-ACK]</span>
-            <span className="text-cyan-300 font-bold tracking-wider">
-              {percent}%
-            </span>
-          </div>
-
-          {/* Glowing Track & Fill */}
-          <div className="relative w-full h-[3px] bg-slate-900/90 rounded-full overflow-hidden border border-cyan-950/60 shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)]">
-            {/* The active filling neon bar */}
+        {/* 7. Progress HUD & High-Tech Telemetry */}
+        <div className="flex flex-col items-center w-64 sm:w-80 md:w-96 space-y-3">
+          {/* Slender Neon Gradient Progress Track */}
+          <div className="relative w-full h-1.5 sm:h-2 bg-slate-900/90 rounded-full overflow-hidden border border-cyan-500/30 p-[1px] shadow-inner shadow-black">
             <div
-              className="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-indigo-500 rounded-full transition-all duration-100 ease-out shadow-[0_0_14px_rgba(6,182,212,0.95)]"
+              className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-sky-400 to-emerald-400 transition-all duration-75 ease-out shadow-[0_0_12px_rgba(6,182,212,0.8)]"
               style={{ width: `${percent}%` }}
             />
           </div>
 
-          {/* Bottom telemetry indicators */}
-          <div className="w-full flex justify-between items-center text-[9px] font-mono text-slate-500 tracking-wider pt-0.5">
-            <span className="flex items-center space-x-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-              <span className="text-slate-400">STATUS: NOMINAL</span>
-            </span>
-            <span className="text-slate-400">EDGE MESH 100GbE</span>
+          {/* Real-time Status Readout & Percentage Counter */}
+          <div className="w-full flex items-center justify-between text-[10px] sm:text-[11px] font-mono tracking-wider">
+            <div className="flex items-center gap-1.5 text-cyan-300/80 truncate pr-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+              <span className="truncate">{getOrbitalStatus(percent)}</span>
+            </div>
+            <div className="text-cyan-300 font-bold tracking-widest shrink-0 pl-1 font-mono">
+              {percent}%
+            </div>
+          </div>
+
+          {/* Telemetry Secondary Footer Bar */}
+          <div className="w-full flex items-center justify-between pt-1 border-t border-cyan-500/10 text-[9px] sm:text-[10px] font-mono text-zinc-500">
+            <span className="text-cyan-500/70">ORBITAL SYNC // NOMINAL</span>
+            <span className="text-zinc-400/80">LATENCY: 12ms</span>
+            <span className="text-emerald-400/70">STATE: 0x00</span>
           </div>
         </div>
       </div>
-
-      {/* 8. Global CSS Keyframes for Radar Sweep, Expansion, and Monogram Ambient Dynamics */}
-      <style>{`
-        @keyframes radar-sweep {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes ping-expand {
-          0% {
-            r: 80px;
-            opacity: 0.8;
-          }
-          70% {
-            opacity: 0.35;
-          }
-          100% {
-            r: 450px;
-            opacity: 0;
-          }
-        }
-
-        @keyframes ping-expand-delayed {
-          0% {
-            r: 80px;
-            opacity: 0;
-          }
-          20% {
-            opacity: 0.7;
-          }
-          80% {
-            opacity: 0.25;
-          }
-          100% {
-            r: 450px;
-            opacity: 0;
-          }
-        }
-
-        @keyframes spin-slow {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes spin-reverse-slow {
-          0% {
-            transform: rotate(360deg);
-          }
-          100% {
-            transform: rotate(0deg);
-          }
-        }
-
-        @keyframes monogram-subtle-float {
-          0%, 100% {
-            transform: translateY(0px) scale(1);
-          }
-          50% {
-            transform: translateY(-2px) scale(1.015);
-          }
-        }
-
-        .animate-radar-sweep {
-          animation: radar-sweep 4s linear infinite;
-        }
-
-        .animate-ping-expand {
-          animation: ping-expand 2.8s cubic-bezier(0.1, 0.4, 0.2, 1) infinite;
-        }
-
-        .animate-ping-expand-delayed {
-          animation: ping-expand-delayed 2.8s cubic-bezier(0.1, 0.4, 0.2, 1) 1.4s infinite;
-        }
-
-        .animate-spin-slow {
-          animation: spin-slow 22s linear infinite;
-        }
-
-        .animate-spin-reverse-slow {
-          animation: spin-reverse-slow 30s linear infinite;
-        }
-
-        .animate-monogram-subtle-float {
-          animation: monogram-subtle-float 3.5s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 };
