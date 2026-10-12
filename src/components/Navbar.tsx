@@ -9,6 +9,7 @@ import {
   FolderGit2,
   Cpu,
   Milestone,
+  Award,
   Mail,
   Menu,
   X,
@@ -38,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
     { name: 'Projects', href: '#projects', icon: FolderGit2 },
     { name: 'Skills', href: '#skills', icon: Cpu },
     { name: 'Journey', href: '#journey', icon: Milestone },
+    { name: 'Certifications', href: '#certifications', icon: Award },
     { name: 'CLI Terminal', href: '#terminal', icon: Terminal, action: onOpenTerminal },
     { name: 'Contact', href: '#contact', icon: Mail },
   ];

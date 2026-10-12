@@ -11,6 +11,7 @@ import { SectionDivider } from './components/SectionDivider';
 import { ProjectsSection } from './components/ProjectsSection';
 import { SkillsSection } from './components/SkillsSection';
 import { ExperienceSection } from './components/ExperienceSection';
+import { Certifications } from './components/Certifications';
 import { InteractiveTerminal } from './components/InteractiveTerminal';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
@@ -88,7 +89,13 @@ export default function App() {
           {/* Career trajectory & chronological milestones */}
           <ExperienceSection />
 
-          {/* Animated Section Divider: Experience -> Terminal */}
+          {/* Animated Section Divider: Experience -> Certifications */}
+          <SectionDivider variant="cyan" label="Accreditations & Seminars" />
+
+          {/* Verified Certifications & Industry Milestones Showcase */}
+          <Certifications />
+
+          {/* Animated Section Divider: Certifications -> Terminal */}
           <SectionDivider variant="violet" label="Developer CLI Sandbox" />
 
           {/* Embedded Interactive Developer CLI with typing animation */}
