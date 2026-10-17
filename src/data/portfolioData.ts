@@ -19,19 +19,27 @@ export const PERSONAL_INFO: PersonalInfo = {
 export const PROJECTS: Project[] = [
   {
     id: 'campus-infra-app',
-    title: 'Campus & School Infrastructure Management App',
-    role: 'Backend Developer & DBA',
+    title: 'PUP Tour — Campus Navigation & Infrastructure App',
+    role: 'Backend & Database Developer',
     category: 'backend',
     details:
-      'Architected a campus navigation and infrastructure management application. Implemented Row-Level Security (RLS) via Supabase and deployed the Flutter web client via Firebase Hosting.',
-    tags: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Firebase', 'Mapping APIs'],
+      'Built and managed the database and backend services for the PUP Tour campus navigation web app. Designed the relational database on Supabase PostgreSQL, set up Row-Level Security to keep student and campus records secure, and configured automated GitHub Actions to ensure the database stays online 24/7.',
+    description:
+      'Built and managed the database and backend services for the PUP Tour campus navigation web app. Designed the relational database on Supabase PostgreSQL, set up Row-Level Security to keep student and campus records secure, and configured automated GitHub Actions to ensure the database stays online 24/7.',
+    about:
+      'Built and managed the database and backend services for the PUP Tour campus navigation web app. Designed the relational database on Supabase PostgreSQL, set up Row-Level Security to keep student and campus records secure, and configured automated GitHub Actions to ensure the database stays online 24/7.',
+    tags: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Vercel', 'GitHub Actions', 'Mapping APIs', 'REST APIs'],
     highlights: [
-      'Engineered normalized relational schemas on PostgreSQL & Supabase',
-      'Configured fine-grained Row-Level Security (RLS) policies to protect student & administrative records',
-      'Deployed cross-platform Flutter application to the web using Firebase Hosting and compiled Dart into optimized WebAssembly/JavaScript.',
+      'Engineered normalized relational schemas on Supabase PostgreSQL with fine-grained Row-Level Security (RLS) policies',
+      'Deployed responsive Flutter Web progressive web app to Vercel Edge Network with global CDN caching and sub-second asset delivery',
+      'Implemented automated 4-day keep-alive cron job via GitHub Actions to maintain cloud database active state and prevent cold pausing',
+      'Integrated interactive campus mapping APIs and spatial pathfinding routines for streamlined student navigation',
     ],
-    techStack: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Firebase', 'Mapping APIs', 'REST APIs', 'SQL'],
-    liveDemoUrl: 'https://puptour-portfolio-demo.web.app',
+    techStack: ['Flutter', 'Dart', 'Supabase', 'PostgreSQL', 'Vercel', 'GitHub Actions', 'Mapping APIs', 'REST APIs'],
+    liveDemoUrl: 'https://pup-tour-campus-navigation.vercel.app',
+    liveUrl: 'https://pup-tour-campus-navigation.vercel.app',
+    githubUrl: 'https://github.com/alexyadao/pup-tour-campus-navigation',
+    featured: true,
     metrics: {
       backendIntensity: 95,
       systemComplexity: 86,
@@ -57,11 +65,11 @@ export const PROJECTS: Project[] = [
         deliverables: ['REST API Endpoints', 'Supabase Auth', 'Client Data Binding'],
       },
       {
-        phase: '3. Verification & Deployment',
-        status: 'verified',
+        phase: '3. Edge Deployment & DevOps Reliability',
+        status: 'completed',
         duration: 'Deployment Phase',
-        description: 'Performed query latency benchmarking, administrative role-based access audits, and deployed live database instances.',
-        deliverables: ['Automated Backups', 'Audit Report', 'Cloud Deployment'],
+        description: 'Deployed Flutter Web client to Vercel Edge Network CDN, configured automated 4-day keep-alive cron job via GitHub Actions, and released optimized PWA bundle.',
+        deliverables: ['Vercel Edge CDN', 'GitHub Actions Cron', 'PWA Release Bundle'],
       },
     ],
     diagrams: [
@@ -107,6 +115,7 @@ export const PROJECTS: Project[] = [
     techStack: ['Windows 10/11 Enterprise', 'Active Directory', 'SQL', 'LAN Configuration', 'DingTalk ITSM', 'Hardware Lifecycle'],
     interactiveDemoId: 'network-topology',
     interactiveDemoTitle: 'Interactive Network Map',
+    githubUrl: 'https://github.com/alexyadao/opsflow',
     metrics: {
       backendIntensity: 88,
       systemComplexity: 85,
@@ -338,7 +347,7 @@ export const PROJECTS: Project[] = [
     technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'REST API'],
     tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'REST API'],
     techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'REST API'],
-    githubUrl: 'https://github.com/alexyadao/examcraft-studio',
+    githubUrl: 'https://github.com/alexyadao/examcraft',
     liveUrl: 'https://examcraft-studio-teal.vercel.app',
     liveDemoUrl: 'https://examcraft-studio-teal.vercel.app',
     featured: true,
@@ -425,7 +434,7 @@ export const PROJECTS: Project[] = [
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'React Context', 'Vercel'],
     tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'React Context', 'Vercel'],
     techStack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'React Context', 'Vercel'],
-    githubUrl: 'https://github.com/alexyadao/opsflow-it-helpdesk',
+    githubUrl: 'https://github.com/alexyadao/opsflow',
     liveUrl: 'https://opsflow-it-helpdesk.vercel.app',
     liveDemoUrl: 'https://opsflow-it-helpdesk.vercel.app',
     featured: true,

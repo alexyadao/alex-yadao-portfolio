@@ -27,6 +27,7 @@ import {
   Cpu,
   Radio,
   Terminal,
+  FolderGit2,
 } from 'lucide-react';
 
 interface ProjectModalProps {
@@ -427,6 +428,19 @@ ${techFormatted}
                 </a>
               )}
 
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-zinc-800 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-300 dark:border-zinc-700 shadow-xs transition-all hover:scale-105"
+                >
+                  <FolderGit2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+                  <span>GitHub</span>
+                  <ExternalLink className="w-3 h-3 text-zinc-400" />
+                </a>
+              )}
+
               {project.interactiveDemoId === 'network-topology' && onOpenNetworkTopology && (
                 <button
                   type="button"
@@ -659,6 +673,34 @@ ${techFormatted}
                   <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
                     {project.details}
                   </p>
+
+                  {(project.liveUrl || project.liveDemoUrl || project.githubUrl) && (
+                    <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800/70">
+                      {(project.liveUrl || project.liveDemoUrl) && (
+                        <a
+                          href={project.liveUrl || project.liveDemoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-600 hover:from-teal-400 hover:to-blue-500 shadow-xs transition-all hover:scale-105"
+                        >
+                          <span>Launch Live Demo</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-2xs transition-all hover:scale-105"
+                        >
+                          <FolderGit2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+                          <span>GitHub Repository</span>
+                          <ExternalLink className="w-3 h-3 text-zinc-400" />
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 

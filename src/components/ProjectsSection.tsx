@@ -67,6 +67,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       'Supabase',
       'Firebase',
       'Vercel',
+      'GitHub Actions',
+      'Mapping APIs',
+      'REST APIs',
       'Active Directory',
       'System Admin',
       'Embedded',
@@ -149,7 +152,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
       case 'campus-school-infra':
         return {
           category: '🗄️ Backend Architecture',
-          role: 'Backend Developer & Cloud Infrastructure',
+          role: 'Backend & Database Developer',
         };
       case 'enterprise-sysadmin-infra':
         return {
